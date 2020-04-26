@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="16096" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+    <device id="retina6_1" orientation="portrait" appearance="light"/>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="16086"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="TTTViewController" customModule="GameBoardV2" customModuleProvider="target">
+            <connections>
+                <outlet property="collection" destination="9VE-Rc-aLQ" id="LZn-r5-hZh"/>
+                <outlet property="view" destination="i5M-Pr-FkT" id="sfx-zR-JGt"/>
+            </connections>
+        </placeholder>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <view clearsContextBeforeDrawing="NO" contentMode="scaleToFill" id="i5M-Pr-FkT">
+            <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
+            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+            <subviews>
+                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Aeb-F5-zbG">
+                    <rect key="frame" x="20" y="64" width="374" height="100"/>
+                    <subviews>
+                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Tic Tac Toe" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="dgF-XC-7lA">
+                            <rect key="frame" x="60" y="20" width="254" height="60"/>
+                            <fontDescription key="fontDescription" type="system" pointSize="20"/>
+                            <nil key="textColor"/>
+                            <nil key="highlightedColor"/>
+                        </label>
+                    </subviews>
+                    <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
+                    <constraints>
+                        <constraint firstAttribute="bottom" secondItem="dgF-XC-7lA" secondAttribute="bottom" constant="20" id="Iwz-tk-KX0"/>
+                        <constraint firstAttribute="height" constant="100" id="WSB-vV-1Sl"/>
+                        <constraint firstItem="dgF-XC-7lA" firstAttribute="top" secondItem="Aeb-F5-zbG" secondAttribute="top" constant="20" id="bMg-74-B1z"/>
+                        <constraint firstItem="dgF-XC-7lA" firstAttribute="leading" secondItem="Aeb-F5-zbG" secondAttribute="leading" constant="60" id="iwF-A0-UdG"/>
+                        <constraint firstAttribute="trailing" secondItem="dgF-XC-7lA" secondAttribute="trailing" constant="60" id="x27-pm-9iZ"/>
+                    </constraints>
+                </view>
+                <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" scrollEnabled="NO" dataMode="none" translatesAutoresizingMaskIntoConstraints="NO" id="9VE-Rc-aLQ">
+                    <rect key="frame" x="20" y="261" width="374" height="374"/>
+                    <color key="backgroundColor" cocoaTouchSystemColor="darkTextColor"/>
+                    <constraints>
+                        <constraint firstAttribute="width" secondItem="9VE-Rc-aLQ" secondAttribute="height" multiplier="1:1" id="NF7-Q9-fRF"/>
+                    </constraints>
+                    <collectionViewFlowLayout key="collectionViewLayout" minimumLineSpacing="10" minimumInteritemSpacing="10" id="UEf-OM-wmB">
+                        <size key="itemSize" width="128" height="128"/>
+                        <size key="headerReferenceSize" width="0.0" height="0.0"/>
+                        <size key="footerReferenceSize" width="0.0" height="0.0"/>
+                        <inset key="sectionInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
+                    </collectionViewFlowLayout>
+                </collectionView>
+            </subviews>
+            <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
+            <constraints>
+                <constraint firstItem="9VE-Rc-aLQ" firstAttribute="centerY" secondItem="i5M-Pr-FkT" secondAttribute="centerY" id="KVI-m3-xY2"/>
+                <constraint firstItem="Aeb-F5-zbG" firstAttribute="top" secondItem="fnl-2z-Ty3" secondAttribute="top" constant="20" id="OAI-Oc-JGY"/>
+                <constraint firstItem="9VE-Rc-aLQ" firstAttribute="leading" secondItem="fnl-2z-Ty3" secondAttribute="leading" constant="20" id="OgH-XR-jI9"/>
+                <constraint firstItem="fnl-2z-Ty3" firstAttribute="trailing" secondItem="9VE-Rc-aLQ" secondAttribute="trailing" constant="20" id="gSF-DB-ez3"/>
+                <constraint firstItem="Aeb-F5-zbG" firstAttribute="leading" secondItem="fnl-2z-Ty3" secondAttribute="leading" constant="20" id="inB-2j-lZs"/>
+                <constraint firstItem="fnl-2z-Ty3" firstAttribute="trailing" secondItem="Aeb-F5-zbG" secondAttribute="trailing" constant="20" id="r76-MU-peL"/>
+            </constraints>
+            <viewLayoutGuide key="safeArea" id="fnl-2z-Ty3"/>
+            <point key="canvasLocation" x="139" y="104"/>
+        </view>
+    </objects>
+</document>
