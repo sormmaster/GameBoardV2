@@ -10,7 +10,8 @@
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="TTTViewController" customModule="GameBoardV2" customModuleProvider="target">
             <connections>
-                <outlet property="collection" destination="9VE-Rc-aLQ" id="LZn-r5-hZh"/>
+                <outlet property="BoardView" destination="mJz-5t-JSK" id="JIZ-I1-bVJ"/>
+                <outlet property="TTTTitle" destination="dgF-XC-7lA" id="jpE-5A-CMn"/>
                 <outlet property="view" destination="i5M-Pr-FkT" id="sfx-zR-JGt"/>
             </connections>
         </placeholder>
@@ -38,26 +39,20 @@
                         <constraint firstAttribute="trailing" secondItem="dgF-XC-7lA" secondAttribute="trailing" constant="60" id="x27-pm-9iZ"/>
                     </constraints>
                 </view>
-                <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" scrollEnabled="NO" dataMode="none" translatesAutoresizingMaskIntoConstraints="NO" id="9VE-Rc-aLQ">
-                    <rect key="frame" x="20" y="261" width="374" height="374"/>
-                    <color key="backgroundColor" cocoaTouchSystemColor="darkTextColor"/>
+                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="mJz-5t-JSK">
+                    <rect key="frame" x="10" y="251" width="394" height="394"/>
+                    <color key="backgroundColor" systemColor="systemGray6Color" red="0.94901960780000005" green="0.94901960780000005" blue="0.96862745100000003" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                     <constraints>
-                        <constraint firstAttribute="width" secondItem="9VE-Rc-aLQ" secondAttribute="height" multiplier="1:1" id="NF7-Q9-fRF"/>
+                        <constraint firstAttribute="width" secondItem="mJz-5t-JSK" secondAttribute="height" multiplier="1:1" id="zcH-EH-5fV"/>
                     </constraints>
-                    <collectionViewFlowLayout key="collectionViewLayout" minimumLineSpacing="10" minimumInteritemSpacing="10" id="UEf-OM-wmB">
-                        <size key="itemSize" width="128" height="128"/>
-                        <size key="headerReferenceSize" width="0.0" height="0.0"/>
-                        <size key="footerReferenceSize" width="0.0" height="0.0"/>
-                        <inset key="sectionInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
-                    </collectionViewFlowLayout>
-                </collectionView>
+                </view>
             </subviews>
             <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
             <constraints>
-                <constraint firstItem="9VE-Rc-aLQ" firstAttribute="centerY" secondItem="i5M-Pr-FkT" secondAttribute="centerY" id="KVI-m3-xY2"/>
+                <constraint firstItem="mJz-5t-JSK" firstAttribute="leading" secondItem="fnl-2z-Ty3" secondAttribute="leading" constant="10" id="5ag-Eb-7wH"/>
+                <constraint firstItem="fnl-2z-Ty3" firstAttribute="trailing" secondItem="mJz-5t-JSK" secondAttribute="trailing" constant="10" id="Ief-ca-kO5"/>
                 <constraint firstItem="Aeb-F5-zbG" firstAttribute="top" secondItem="fnl-2z-Ty3" secondAttribute="top" constant="20" id="OAI-Oc-JGY"/>
-                <constraint firstItem="9VE-Rc-aLQ" firstAttribute="leading" secondItem="fnl-2z-Ty3" secondAttribute="leading" constant="20" id="OgH-XR-jI9"/>
-                <constraint firstItem="fnl-2z-Ty3" firstAttribute="trailing" secondItem="9VE-Rc-aLQ" secondAttribute="trailing" constant="20" id="gSF-DB-ez3"/>
+                <constraint firstItem="mJz-5t-JSK" firstAttribute="centerY" secondItem="i5M-Pr-FkT" secondAttribute="centerY" id="em1-8m-r9c"/>
                 <constraint firstItem="Aeb-F5-zbG" firstAttribute="leading" secondItem="fnl-2z-Ty3" secondAttribute="leading" constant="20" id="inB-2j-lZs"/>
                 <constraint firstItem="fnl-2z-Ty3" firstAttribute="trailing" secondItem="Aeb-F5-zbG" secondAttribute="trailing" constant="20" id="r76-MU-peL"/>
             </constraints>
