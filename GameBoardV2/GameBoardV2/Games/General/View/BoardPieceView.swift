@@ -15,14 +15,17 @@ class BoardPieceView: UIView {
     weak var delegate: BoardPieceDelegate?
     var currentColor: UIColor?
     var pieceLabel: UILabel?
-    var piecePicture: UIImage?
+    var defaultColor: UIColor
     var x: Int = 0
     var y: Int = 0
+
     init(frame: CGRect, color: UIColor, x: Int, y: Int, initialText: String) {
+        self.defaultColor = color
         super.init(frame: frame)
         self.x = x
         self.y = y
-        self.backgroundColor = color
+        backgroundColor = color
+
         putLabel(text: initialText)
     }
 
@@ -45,13 +48,14 @@ class BoardPieceView: UIView {
     }
 
     func updateView(text: String, color: UIColor) {
-        self.backgroundColor = color
+        backgroundColor = color
         guard let pieceLabel = pieceLabel else {
             putLabel(text: text)
             return
         }
         pieceLabel.text = text
     }
+
     override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
         delegate?.onTouch(view: self)
     }
@@ -62,15 +66,17 @@ class BoardPieceView: UIView {
             return
         }
         pieceLabel.text  = text
+        backgroundColor = defaultColor
     }
     
     private func putLabel(text: String) {
         pieceLabel = UILabel.init(frame: CGRect.init(origin: .init(x: 0, y: 0), size: .init(width: self.frame.width, height: self.frame.height)))
 
         guard let pieceLabel = pieceLabel else {
-            print("could not assign label to view contraints")
+            print("could not assign label to view constraints")
             return
         }
+
         pieceLabel.textAlignment = .center
         pieceLabel.text = text
         self.addSubview(pieceLabel)

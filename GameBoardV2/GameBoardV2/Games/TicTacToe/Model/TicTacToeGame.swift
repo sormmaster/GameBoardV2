@@ -9,24 +9,31 @@
 import Foundation
 
 class TicTacToeGame{
+
     private var playerOneTurn: Bool = true
     private var board: [[String]] = [["-","-","-"],["-","-","-"],["-","-","-"]]
     let origins = [(0,0), (0,1), (0,2), (1,2), (2,2), (2,1), (2,0), (1,0)]
     let moves = [(0,1), (1,0), (1,1), (0,-1), (-1,0), (-1,-1), (1,-1), (-1,1)]
+
     enum solveOptions {
         case solved
         case unsolved
         case finished
     }
+
     init() {
         newGame()
     }
 
+    func validMove(posx: Int, posy:Int) -> Bool {
+        return posx < 3 && posy < 3 && board[posy][posx] == "-"
+    }
+
     func makeMove(posx: Int, posy: Int) -> String {
-        print("making move on " + String(posx) + " " + String(posy) )
-        guard posx < 3 && posy < 3 && board[posy][posx] == "-" else {return board[posy][posx]}
         board[posy][posx] = playerOneTurn ? "X" : "O"
-        playerOneTurn = !playerOneTurn
+        if(playable() && !solved()) {
+            playerOneTurn = !playerOneTurn
+        }
         return board[posy][posx]
     }
 
@@ -51,6 +58,17 @@ class TicTacToeGame{
         return recursiveSolve()
     }
 
+    func playable() -> Bool {
+        var playable: Bool = false
+
+        board.forEach({ row in
+            if(row.contains("-") && !playable){
+                playable = true
+            }
+        })
+        return playable
+    }
+
     func recursiveSolve() -> Bool {
         var foundEnds: [solveOptions] = []
         origins.forEach { (x,y) in
@@ -58,18 +76,6 @@ class TicTacToeGame{
                 foundEnds.append(solvingNode(solve: [board[x][y]], x: x, y: y,movement: (a,b)))
             }
         }
-        foundEnds.forEach { (end) in
-            switch end {
-            case .solved:
-                print("found end: solved")
-            case .unsolved:
-                print("found end: unsolved")
-            case .finished:
-                print("found end: finished")
-            }
-
-        }
-        print("Done printing ends")
         return foundEnds.contains(.solved)
     }
 

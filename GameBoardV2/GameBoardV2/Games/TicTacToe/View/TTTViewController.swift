@@ -12,11 +12,17 @@ class TTTViewController: UIViewController {
 
     @IBOutlet weak var TTTTitle: UILabel!
     @IBOutlet weak var BoardView: UIView!
+    @IBOutlet weak var TTTResetButton: UIButton!
+    
+    @IBAction func TTTResetClick(_ sender: Any) {
+            resetBoard()
+    }
 
     weak var coordinator: TTTCoordinator?
 
     var game: TicTacToeGame?
     var boardViews: [[BoardPieceView]] = [[],[],[]]
+    var allowInteractions = true
     override func viewDidLoad() {
         super.viewDidLoad()
         setupBoard()
@@ -32,13 +38,18 @@ class TTTViewController: UIViewController {
     }
 
     func resetBoard(){
-        guard let game = game else {return}
-        boardViews.forEach { (row) in
+        allowInteractions = false
+        Timer.scheduledTimer(withTimeInterval: 2.0, repeats: false, block: {_ in
+            guard let game = self.game else {return}
+            self.boardViews.forEach { (row) in
             row.forEach { piece in
                 piece.reset(text: game.defaultValue())
             }
         }
-        game.newGame()
+            game.newGame()
+            self.BoardView.backgroundColor = UIColor.darkGray
+            self.allowInteractions = true
+        })
     }
 
     func setupRow(row: [String], y: Int, minY: CGFloat, minX: CGFloat, height: CGFloat, totalWidth: CGFloat) -> [BoardPieceView] {
@@ -66,14 +77,23 @@ class TTTViewController: UIViewController {
         return [piece1,piece2,piece3]
 
     }
-
+    
 }
 
 extension TTTViewController: BoardPieceDelegate {
     func onTouch(view: BoardPieceView) {
-        guard let game = game else {return}
-        view.updateView(text: game.makeMove(posx: view.x, posy: view.y))
+        guard allowInteractions, let game = game, game.validMove(posx: view.x, posy: view.y) else {return}
+        let color = game.getTurn() ? UIColor.red : UIColor.blue
+        view.updateView(text: game.makeMove(posx: view.x, posy: view.y), color: color)
+
         if(game.solved()){
+            print(game.getTurn() ? "Player One" : "Player Two" + " Won")
+            self.BoardView.backgroundColor = game.getTurn() ? UIColor.red : UIColor.blue
+            resetBoard()
+        }
+
+        if(!game.playable()){
+            print("Nobody One The Game")
             resetBoard()
         }
     }
