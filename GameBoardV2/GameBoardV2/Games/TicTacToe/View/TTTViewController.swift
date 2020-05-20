@@ -11,9 +11,8 @@ import UIKit
 class TTTViewController: UIViewController {
 
     @IBOutlet weak var TTTTitle: UILabel!
-    @IBOutlet weak var BoardView: UIView!
     @IBOutlet weak var TTTResetButton: UIButton!
-    
+
     @IBAction func TTTResetClick(_ sender: Any) {
             resetBoard()
     }
@@ -21,20 +20,64 @@ class TTTViewController: UIViewController {
     weak var coordinator: TTTCoordinator?
 
     var game: TicTacToeGame?
-    var boardViews: [[BoardPieceView]] = [[],[],[]]
+    var boardView: UIView
+    var boardViews: [[BoardPieceView]] = []
     var allowInteractions = true
-    override func viewDidLoad() {
-        super.viewDidLoad()
+
+    override func viewDidAppear(_ animated: Bool) {
         setupBoard()
+    }
+
+    override func viewDidDisappear(_ animated: Bool) {
+        for view in boardView.subviews {
+            view.removeFromSuperview()
+        }
+    }
+
+    override init(nibName nibNameOrNil: String?, bundle nibBundleOrNil: Bundle?) {
+        boardView = UIView()
+        super.init(nibName: nibNameOrNil, bundle: nibBundleOrNil)
+        view.addSubview(boardView)
+        boardView.backgroundColor = .darkGray
+        boardView.translatesAutoresizingMaskIntoConstraints = false
+        boardView.leadingAnchor.constraint(equalTo: view.layoutMarginsGuide.leadingAnchor, constant: 10).isActive = true
+        boardView.widthAnchor.constraint(equalTo: view.layoutMarginsGuide.widthAnchor, constant: -20).isActive = true
+        boardView.centerYAnchor.constraint(equalTo: view.layoutMarginsGuide.centerYAnchor).isActive = true
+        boardView.heightAnchor.constraint(equalTo: boardView.widthAnchor).isActive = true
+
+    }
+
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
     }
 
     func setupBoard() {
         guard let game = game else {return}
-        let board = game.getBoard()
-        for(index, row) in board.enumerated() {
-            boardViews[index] = setupRow(row: row, y: index, minY: BoardView.frame.minY, minX:BoardView.frame.minX , height: BoardView.frame.height, totalWidth: BoardView.frame.width)
+        game.newGame()
+
+        for index in 0...2 {
+            boardViews.append(setupRow(value: "-", y: index, minX: 0, minY: 0, height: boardView.frame.height, width: boardView.frame.width, squareSize: 3))
+        }
+    }
+
+    func setupRow(value: String, y: Int, minX: CGFloat, minY: CGFloat, height: CGFloat, width: CGFloat, squareSize: CGFloat) -> [BoardPieceView] {
+
+        let incrementWidth = width / ((squareSize * 2) + 1)
+        let incrementHeight = height / ((squareSize * 2) + 1)
+
+        var pieceArray: [BoardPieceView] = []
+
+        for index in 0...Int(squareSize - 1) {
+            let frameHeight = (((CGFloat(y) * 2.0) + 1) * incrementHeight + minY)
+            let frameWidth = (((CGFloat(index) * 2.0) + 1) * incrementWidth + minX)
+            let frame = CGRect(x: frameWidth , y:frameHeight , width: incrementWidth, height: incrementHeight)
+            let piece = BoardPieceView(frame: frame, color: UIColor.lightGray, x: index, y: y, initialText: value)
+            piece.delegate = self
+            pieceArray.append(piece)
+            boardView.addSubview(piece)
         }
 
+        return pieceArray
     }
 
     func resetBoard(){
@@ -47,48 +90,23 @@ class TTTViewController: UIViewController {
             }
         }
             game.newGame()
-            self.BoardView.backgroundColor = UIColor.darkGray
+            self.boardView.backgroundColor = UIColor.darkGray
             self.allowInteractions = true
         })
     }
 
-    func setupRow(row: [String], y: Int, minY: CGFloat, minX: CGFloat, height: CGFloat, totalWidth: CGFloat) -> [BoardPieceView] {
-
-        let incrementWidth = totalWidth / 6
-        let incrementHeight = height / 6
-        let trueY = minY + ((CGFloat.init(y) + 2) * incrementHeight/2) + (CGFloat.init(y) * incrementHeight)
-
-        let frame1 = CGRect.init(x: minX + incrementWidth/2, y: trueY, width: incrementWidth, height: incrementHeight)
-        let frame2 = CGRect.init(x: minX + incrementWidth/2 + incrementWidth*2, y: trueY, width: incrementWidth, height: incrementHeight)
-        let frame3 = CGRect.init(x: minX + incrementWidth/2 + incrementWidth*4, y: trueY, width: incrementWidth, height: incrementHeight)
-
-        let piece1 = BoardPieceView.init(frame: frame1, color: UIColor.lightGray, x: 0, y: y, initialText: row[0])
-        piece1.delegate = self
-        view.addSubview(piece1)
-
-        let piece2 = BoardPieceView.init(frame: frame2, color: UIColor.lightGray, x: 1, y: y, initialText: row[0])
-        piece2.delegate = self
-        view.addSubview(piece2)
-
-        let piece3 = BoardPieceView.init(frame: frame3, color: UIColor.lightGray, x: 2, y: y, initialText: row[0])
-        piece3.delegate = self
-        view.addSubview(piece3)
-
-        return [piece1,piece2,piece3]
-
-    }
-    
 }
 
 extension TTTViewController: BoardPieceDelegate {
     func onTouch(view: BoardPieceView) {
+        print("clickity click")
         guard allowInteractions, let game = game, game.validMove(posx: view.x, posy: view.y) else {return}
         let color = game.getTurn() ? UIColor.red : UIColor.blue
         view.updateView(text: game.makeMove(posx: view.x, posy: view.y), color: color)
 
         if(game.solved()){
             print(game.getTurn() ? "Player One" : "Player Two" + " Won")
-            self.BoardView.backgroundColor = game.getTurn() ? UIColor.red : UIColor.blue
+            self.boardView.backgroundColor = game.getTurn() ? UIColor.red : UIColor.blue
             resetBoard()
         }
 

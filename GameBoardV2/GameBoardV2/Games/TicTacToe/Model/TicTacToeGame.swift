@@ -11,7 +11,7 @@ import Foundation
 class TicTacToeGame{
 
     private var playerOneTurn: Bool = true
-    private var board: [[String]] = [["-","-","-"],["-","-","-"],["-","-","-"]]
+    private var board: [[String]] = []
     let origins = [(0,0), (0,1), (0,2), (1,2), (2,2), (2,1), (2,0), (1,0)]
     let moves = [(0,1), (1,0), (1,1), (0,-1), (-1,0), (-1,-1), (1,-1), (-1,1)]
 
@@ -37,12 +37,16 @@ class TicTacToeGame{
         return board[posy][posx]
     }
 
-    func getBoard() -> [[String]] {
-        return board
-    }
-
     func newGame() {
-        board = [["-","-","-"],["-","-","-"],["-","-","-"]]
+        var tempBoard: [[String]]  = []
+        for _ in 1...3 {
+            var row: [String] = []
+            for _ in 1...3 {
+                row.append(defaultValue())
+            }
+            tempBoard.append(row)
+        }
+        board = tempBoard
         playerOneTurn = true
     }
 
