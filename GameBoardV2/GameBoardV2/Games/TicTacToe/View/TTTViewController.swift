@@ -54,7 +54,7 @@ class TTTViewController: UIViewController {
     func setupBoard() {
         guard let game = game else {return}
         game.newGame()
-
+        game.gameDelegate = self
         for index in 0...2 {
             boardViews.append(setupRow(value: "-", y: index, minX: 0, minY: 0, height: boardView.frame.height, width: boardView.frame.width, squareSize: 3))
         }
@@ -101,18 +101,18 @@ extension TTTViewController: BoardPieceDelegate {
     func onTouch(view: BoardPieceView) {
         print("clickity click")
         guard allowInteractions, let game = game, game.validMove(posx: view.x, posy: view.y) else {return}
-        let color = game.getTurn() ? UIColor.red : UIColor.blue
+        let color = game.getTurn().giveColor()
         view.updateView(text: game.makeMove(posx: view.x, posy: view.y), color: color)
-
-        if(game.solved()){
-            print(game.getTurn() ? "Player One" : "Player Two" + " Won")
-            self.boardView.backgroundColor = game.getTurn() ? UIColor.red : UIColor.blue
-            resetBoard()
-        }
-
-        if(!game.playable()){
-            print("Nobody One The Game")
-            resetBoard()
-        }
     }
+}
+
+extension TTTViewController: BoardGameDelegate {
+    func gameOver(end: Player?) {
+        guard let game = game else { return }
+        if(game.solved()) {
+            self.boardView.backgroundColor = game.getTurn().giveColor()
+        }
+        resetBoard()
+    }
+
 }
