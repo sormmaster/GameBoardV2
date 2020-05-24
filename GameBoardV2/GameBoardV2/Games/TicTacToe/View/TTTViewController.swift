@@ -20,8 +20,7 @@ class TTTViewController: UIViewController {
     weak var coordinator: TTTCoordinator?
 
     var game: TicTacToeGame?
-    var boardView: UIView
-    var boardViews: [[BoardPieceView]] = []
+    var boardView: BoardGameView
     var allowInteractions = true
 
     override func viewDidAppear(_ animated: Bool) {
@@ -35,15 +34,10 @@ class TTTViewController: UIViewController {
     }
 
     override init(nibName nibNameOrNil: String?, bundle nibBundleOrNil: Bundle?) {
-        boardView = UIView()
+        boardView = BoardGameView(columns: 3, rows: 3)
         super.init(nibName: nibNameOrNil, bundle: nibBundleOrNil)
         view.addSubview(boardView)
-        boardView.backgroundColor = .darkGray
-        boardView.translatesAutoresizingMaskIntoConstraints = false
-        boardView.leadingAnchor.constraint(equalTo: view.layoutMarginsGuide.leadingAnchor, constant: 10).isActive = true
-        boardView.widthAnchor.constraint(equalTo: view.layoutMarginsGuide.widthAnchor, constant: -20).isActive = true
-        boardView.centerYAnchor.constraint(equalTo: view.layoutMarginsGuide.centerYAnchor).isActive = true
-        boardView.heightAnchor.constraint(equalTo: boardView.widthAnchor).isActive = true
+        boardView.setConstraints(parent: view)
 
     }
 
@@ -55,36 +49,15 @@ class TTTViewController: UIViewController {
         guard let game = game else {return}
         game.newGame()
         game.gameDelegate = self
-        for index in 0...2 {
-            boardViews.append(setupRow(value: "-", y: index, minX: 0, minY: 0, height: boardView.frame.height, width: boardView.frame.width, squareSize: 3))
-        }
-    }
-
-    func setupRow(value: String, y: Int, minX: CGFloat, minY: CGFloat, height: CGFloat, width: CGFloat, squareSize: CGFloat) -> [BoardPieceView] {
-
-        let incrementWidth = width / ((squareSize * 2) + 1)
-        let incrementHeight = height / ((squareSize * 2) + 1)
-
-        var pieceArray: [BoardPieceView] = []
-
-        for index in 0...Int(squareSize - 1) {
-            let frameHeight = (((CGFloat(y) * 2.0) + 1) * incrementHeight + minY)
-            let frameWidth = (((CGFloat(index) * 2.0) + 1) * incrementWidth + minX)
-            let frame = CGRect(x: frameWidth , y:frameHeight , width: incrementWidth, height: incrementHeight)
-            let piece = BoardPieceView(frame: frame, color: UIColor.lightGray, x: index, y: y, initialText: value)
-            piece.delegate = self
-            pieceArray.append(piece)
-            boardView.addSubview(piece)
-        }
-
-        return pieceArray
+        boardView.setupColumns(parent: self)
+        
     }
 
     func resetBoard(){
         allowInteractions = false
         Timer.scheduledTimer(withTimeInterval: 2.0, repeats: false, block: {_ in
             guard let game = self.game else {return}
-            self.boardViews.forEach { (row) in
+            self.boardView.getViews().forEach { (row) in
             row.forEach { piece in
                 piece.reset(text: game.defaultValue())
             }
