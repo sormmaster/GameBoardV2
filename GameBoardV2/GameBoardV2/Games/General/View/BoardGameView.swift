@@ -14,17 +14,12 @@ class BoardGameView: UIView {
     private var columns: Int
     private var rows: Int
 
-    override init(frame: CGRect) {
-        columns = 7
-        rows = 6
-        super.init(frame: frame)
-    }
-
     init(columns: Int, rows: Int) {
         self.columns = columns
         self.rows = rows
         super.init(frame: CGRect())
     }
+    
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
