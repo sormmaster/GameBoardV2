@@ -14,8 +14,8 @@ protocol BoardGameDelegate: class {
 }
 
 class BoardGame {
-    private var playerTurn: Player = .playerOne
-    private var board: [[String]] = []
+    var playerTurn: Player = .playerOne
+    var board: [[String]] = []
 
     weak var gameDelegate: BoardGameDelegate?
 
@@ -57,15 +57,15 @@ class BoardGame {
             origins.append((0,value))
         }
 
-        for value in 0 ... (columns - 1) {
-            origins.append((value,(rows - 1)))
-        }
-
-        for value in (0 ... (columns - 2)).reversed() {
+        for value in 0 ... (rows - 1) {
             origins.append(((columns - 1),value))
         }
 
-        for value in (1 ... (rows - 2)).reversed() {
+        for value in (0 ... (columns - 2)).reversed() {
+            origins.append((value,(rows - 1)))
+        }
+
+        for value in (1 ... (columns - 2)).reversed() {
             origins.append((value,0))
         }
     }
@@ -104,33 +104,11 @@ class BoardGame {
 
         return board[posy][posx]
     }
-}
-
-extension BoardGame: Solvable {
-    func solved() -> Bool {
-        var foundEnds: [solveOptions] = []
-        origins.forEach { (x,y) in
-            moves.forEach { (a,b) in
-                foundEnds.append(solvingNode(solveCheck: [board[x][y]], x: x, y: y,movement: (a,b)))
-            }
-        }
-        return foundEnds.contains(.solved)
-    }
-
-    func playable() -> Bool {
-        var playable: Bool = false
-
-        board.forEach({ row in
-            if(row.contains("-") && !playable){
-                playable = true
-            }
-        })
-        return playable
-    }
 
     func validMove(posx: Int, posy:Int) -> Bool {
         if(!gameOver){
-            return posx < board.count && posy < board[0].count && board[posy][posx] == "-"
+            guard posy < board.count && posx < board[0].count && board[posy][posx] == "-" else { return false}
+            return true
         } else { return false }
     }
 
@@ -143,7 +121,7 @@ extension BoardGame: Solvable {
             return solve(group: solveCheck) ? .solved : .unsolved
         }
         var solveSend = solveCheck
-        solveSend.append(board[move.0][move.1])
+        solveSend.append(board[move.1][move.0])
         return solvingNode(solveCheck: solveSend, x: move.0, y: move.1, movement: movement)
     }
 
@@ -156,7 +134,7 @@ extension BoardGame: Solvable {
     }
 
     private func invalidOrValid(value: Int, adjustment: Int, group: String) -> Bool {
-        let valid = group == "row" ? ((value + adjustment >= 0) && (value + adjustment < board.count)) : ((value + adjustment >= 0) && (value + adjustment < board[0].count))
+        let valid = group == "column" ? ((value + adjustment >= 0) && (value + adjustment < board.count)) : ((value + adjustment >= 0) && (value + adjustment < board[0].count))
         return valid
     }
 
@@ -180,6 +158,30 @@ extension BoardGame: Solvable {
         }
 
         return hitFour
+    }
+}
+
+//solving is screwed up still
+extension BoardGame: Solvable {
+    func solved() -> Bool {
+        var foundEnds: [solveOptions] = []
+        origins.forEach { (pos1,pos2) in
+            moves.forEach { (move1,move2) in
+                foundEnds.append(solvingNode(solveCheck: [board[pos1][pos2]], x: pos2, y: pos1,movement: (move1,move2)))
+            }
+        }
+        return foundEnds.contains(.solved)
+    }
+
+    func playable() -> Bool {
+        var playable: Bool = false
+
+        board.forEach({ row in
+            if(row.contains("-") && !playable){
+                playable = true
+            }
+        })
+        return playable
     }
 
 }

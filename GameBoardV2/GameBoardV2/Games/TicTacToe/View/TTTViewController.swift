@@ -49,7 +49,7 @@ class TTTViewController: UIViewController {
         guard let game = game else {return}
         game.newGame()
         game.gameDelegate = self
-        boardView.setupColumns(parent: self)
+        boardView.setupRows(parent: self)
         
     }
 
